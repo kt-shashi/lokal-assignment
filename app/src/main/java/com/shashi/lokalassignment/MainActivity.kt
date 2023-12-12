@@ -1,21 +1,39 @@
 package com.shashi.lokalassignment
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.shashi.lokalassignment.model.Product
 
 class MainActivity : AppCompatActivity() {
 
-    var productList = ArrayList<Product>()
-    var TAG = "Idk"
+    private var TAG = "Idk"
+
+    private var productList = ArrayList<Product>()
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var productAdapter: ProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        initializeUiComponents()
+        loadProduct()
+
+    }
+
+    private fun initializeUiComponents() {
+
+        productAdapter = ProductAdapter(this)
+        recyclerView = findViewById(R.id.rv_products)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = productAdapter
 
     }
 
@@ -29,7 +47,6 @@ class MainActivity : AppCompatActivity() {
             Request.Method.GET, url, null,
             { response ->
 
-                // Get url of image
                 var productResponse = response.getJSONArray("products")
                 productList.clear()
 
@@ -37,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
                     var productJsonObject = productResponse.getJSONObject(i)
 
-                    var news = Product(
+                    var product = Product(
                         productJsonObject.getString("id"),
                         productJsonObject.getString("title"),
                         productJsonObject.getString("description"),
@@ -47,10 +64,12 @@ class MainActivity : AppCompatActivity() {
                         productJsonObject.getString("thumbnail")
                     )
 
+                    productList.add(product)
                 }
 
-//                newsAdapter.updateNewsList(newsList)
-//                binding.rvNewsAM.adapter?.notifyDataSetChanged()
+                productAdapter.updateProductList(productList)
+                recyclerView.adapter?.notifyDataSetChanged()
+
 //                binding.progressBarAM.visibility = View.GONE
 
             },
