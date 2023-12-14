@@ -30,6 +30,15 @@
             tools:text="Product Title" />
 
         <TextView
+            android:id="@+id/item_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="@color/white_custom"
+            android:textStyle="bold"
+            tools:text="Product price" />
+
+        <TextView
             android:id="@+id/item_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,15 +46,6 @@
             android:textColor="@color/white_custom"
             android:textStyle="italic"
             tools:text="Product description" />
-
-        <TextView
-            android:id="@+id/item_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textColor="@color/white_custom"
-            android:textStyle="italic"
-            tools:text="Product price" />
 
     </LinearLayout>
 

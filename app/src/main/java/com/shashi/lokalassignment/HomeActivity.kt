@@ -1,5 +1,6 @@
 package com.shashi.lokalassignment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -8,9 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
+import com.google.gson.Gson
 import com.shashi.lokalassignment.model.Product
 
-class MainActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), ProductItemClicked {
 
     private var TAG = "Idk"
 
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeUiComponents() {
 
-        productAdapter = ProductAdapter(this)
+        productAdapter = ProductAdapter(this, this)
         recyclerView = findViewById(R.id.rv_products)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = productAdapter
@@ -61,7 +63,8 @@ class MainActivity : AppCompatActivity() {
                         productJsonObject.getString("price"),
                         productJsonObject.getString("brand"),
                         productJsonObject.getString("category"),
-                        productJsonObject.getString("thumbnail")
+                        productJsonObject.getString("thumbnail"),
+                        productJsonObject.getString("rating")
                     )
 
                     productList.add(product)
@@ -84,6 +87,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onItemClicked(product: Product) {
+
+        val gson = Gson()
+        val intent = Intent(this, ProductActivity::class.java)
+        intent.putExtra("product", gson.toJson(product))
+
+        Log.d("idk", "onItemClicked: Product - ${gson.toJson(product)}")
+
+        startActivity(intent)
+
     }
 
 }

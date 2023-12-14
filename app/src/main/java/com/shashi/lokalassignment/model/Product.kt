@@ -7,5 +7,6 @@ data class Product(
     var price: String,
     var brand: String,
     var category: String,
-    var thumbnail: String
+    var thumbnail: String,
+    var rating: String
 )

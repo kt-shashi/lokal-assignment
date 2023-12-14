@@ -1,6 +1,7 @@
 package com.shashi.lokalassignment
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.shashi.lokalassignment.model.Product
 
-class ProductAdapter(var context: Context) :
+class ProductAdapter(
+    var context: Context,
+    private val listner: ProductItemClicked,
+) :
     RecyclerView.Adapter<ProductViewHolder>() {
 
     private var productList = ArrayList<Product>()
@@ -22,21 +26,26 @@ class ProductAdapter(var context: Context) :
 
         var viewHolder = ProductViewHolder(view)
 
+        view.setOnClickListener {
+            listner.onItemClicked(productList.get(viewHolder.adapterPosition))
+        }
+
         return viewHolder
 
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
 
-        holder.tvTitle.text = productList.get(position).title
-        holder.tvDesc.text = productList.get(position).description
-        holder.tvPrice.text = "Price: ₹ ${productList.get(position).price} only"
-
         Glide
             .with(context)
             .load(productList.get(position).thumbnail)
             .placeholder(R.drawable.icon_placeholder)
             .into(holder.ivThumbnail)
+
+        holder.tvTitle.text = productList.get(position).title
+        holder.tvDesc.text = productList.get(position).description
+        holder.tvPrice.text = "Price: ₹${productList.get(position).price} only"
+
     }
 
     override fun getItemCount(): Int {
@@ -58,4 +67,8 @@ class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var ivThumbnail = itemView.findViewById<ImageView>(R.id.item_thumbnail)
     var tvPrice = itemView.findViewById<TextView>(R.id.item_price)
 
+}
+
+interface ProductItemClicked {
+    fun onItemClicked(product: Product)
 }
